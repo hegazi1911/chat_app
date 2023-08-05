@@ -1,19 +1,21 @@
 import 'package:chat_app/Helper/text_field.dart';
+import 'package:chat_app/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 import '../Helper/custom_button.dart';
 import '../Helper/snack_par.dart';
 
-class SignIn extends StatefulWidget {
-  const SignIn({super.key});
+class SignInPage extends StatefulWidget {
+  const SignInPage({super.key});
 
   @override
-  State<SignIn> createState() => _SignInState();
+  State<SignInPage> createState() => _SignInPageState();
 }
 
-class _SignInState extends State<SignIn> {
+class _SignInPageState extends State<SignInPage> {
   String? email;
 
   String? password;
@@ -84,8 +86,10 @@ class _SignInState extends State<SignIn> {
                                 await auth.signInWithEmailAndPassword(
                                     email: email!, password: password!);
                                 showSnackBar(context, "success");
-                                Navigator.pushNamed(context, "ChatPage",
-                                    arguments: email);
+                                context.goNamed(Routes.chatPage,
+                                    pathParameters: {
+                                      Constants.email: email ?? ""
+                                    });
                               } on FirebaseAuthException catch (e) {
                                 if (e.code == 'user-not-found') {
                                   showSnackBar(
@@ -115,7 +119,7 @@ class _SignInState extends State<SignIn> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          Navigator.pushNamed(context, "Register");
+                          context.push("/registerPage");
                         },
                         child: const Text(
                           "Register",

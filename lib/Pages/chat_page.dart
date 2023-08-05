@@ -11,11 +11,10 @@ class ChatPage extends StatelessWidget {
   CollectionReference messages =
       FirebaseFirestore.instance.collection('messages');
   TextEditingController textFieldController = TextEditingController();
-
-  ChatPage({super.key});
+  final String? email;
+  ChatPage({super.key, this.email});
   @override
   Widget build(BuildContext context) {
-    var email = ModalRoute.of(context)!.settings.arguments;
     String message = "";
     return StreamBuilder<QuerySnapshot>(
       stream: messages.orderBy("createdAt", descending: true).snapshots(),

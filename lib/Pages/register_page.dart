@@ -1,10 +1,12 @@
 import 'package:chat_app/Helper/snack_par.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 import '../Helper/custom_button.dart';
 import '../Helper/text_field.dart';
+import '../main.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -86,7 +88,10 @@ class _RegisterPageState extends State<RegisterPage> {
                                 await auth.createUserWithEmailAndPassword(
                                     email: email!, password: password!);
                                 showSnackBar(context, "success");
-                                Navigator.pushNamed(context, "ChatPage");
+                                context.goNamed(Routes.chatPage,
+                                    pathParameters: {
+                                      Constants.email: email ?? ""
+                                    });
                               } on FirebaseAuthException catch (e) {
                                 if (e.code == 'weak-password') {
                                   showSnackBar(context, "week password");
@@ -112,7 +117,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          Navigator.pop(context);
+                          context.pop();
                         },
                         child: const Text(
                           "   LogIn",
